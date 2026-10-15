@@ -23,6 +23,24 @@ def main():
     #   data row (its values joined by commas) whose value in that column equals
     #   args.value.
 
+    try:
+        with open(args.filename, "r", newline="") as file:
+            reader = csv.reader(file)
+
+            # Read the header row to find the index of args.column
+            header = next(reader)
+            column_index = header.index(args.column)
+
+            # Check each data row and print matches joined by commas
+            for row in reader:
+                if row and row[column_index] == args.value:
+                    print(",".join(row))
+
+    except FileNotFoundError:
+        print(f"Error: The file '{args.filename}' was not found.")
+    except ValueError:
+        print(f"Error: Column '{args.column}' was not found in the CSV header.")
+
 
 if __name__ == "__main__":
     main()
